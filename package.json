@@ -4,7 +4,9 @@
   "description": "node js to do app",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node app.js",
+    "install": "npm install"
   },
   "author": "vinita",
   "license": "ISC",
