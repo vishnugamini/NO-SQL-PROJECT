@@ -1,0 +1,118 @@
+body {
+    background-color: #d9f5ec;
+}
+
+.outer {
+    background-color: #2d9673;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center the outer container */
+    margin-top: 7rem;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 5px 10px 10px #10663b;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #fff;
+}
+
+form {
+    margin-top: 2rem;
+    text-align: center; /* Added this line */
+}
+.inner {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column; /* Change to column to improve spacing */
+    align-items: center; /* Center inner content */
+}
+
+.inpt {
+    border-radius: 25px;
+    outline: none;
+    background-color: #d9f5ec;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added box-shadow */
+}
+
+.add-btn {
+    color: #070606;
+    cursor: pointer;
+    font-weight: bolder;
+    outline: none;
+    border-radius: 15px;
+    background-color: #2cda83;
+    padding: 10px 20px; /* Increased padding for spacing */
+}
+.add-btn:hover {
+    background-color: #92d492;
+}
+
+.inner li {
+    list-style: none;
+    padding: 5px;
+    border: 2px solid #d9f5ec;
+    border-radius: 15px;
+    margin-top: 10px;
+    background-color: #d9f5ec;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    align-items: center; /* Center the list items */
+}
+
+.checkbox {
+    margin-right: 10px;
+    border-radius: 15px;
+    height: 15px;
+    width: 15px;
+    background: transparent;
+    border: 2px solid #10663b;
+    display: inline-block; /* Ensure checkbox is inline */
+    vertical-align: middle; /* Vertically align checkbox */
+}
+
+.todo-actions {
+    display: flex;
+    align-items: center;
+}
+
+.todo-actions a {
+    margin-left: 10px;
+    color: black;
+}
+
+.todo-item {
+    flex-grow: 1;
+}
+
+.edit:hover,
+.del:hover {
+    color: red;
+}
+
+.bottom {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-top: 2rem;
+}
+
+.btnHide {
+    background-color: #2cda83;
+    color: #070606;
+    border-radius: 15px;
+    box-shadow: 2px 4px 2px lightgreen;
+    font-weight: bolder;
+    margin-top: 10px; /* Add spacing between button and other elements */
+}
+
+.btnHide:hover {
+    background-color: #92d492;
+}
