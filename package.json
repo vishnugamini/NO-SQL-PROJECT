@@ -5,8 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node app.js",
-    "install": "npm install"
+    "build": "node app.js"
   },
   "author": "vinita",
   "license": "ISC",

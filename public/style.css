@@ -33,13 +33,15 @@ form {
 }
 
 .inpt {
+    border: 2px solid; /* Add border on all sides */
     border-radius: 25px;
     outline: none;
     background-color: #d9f5ec;
     margin-bottom: 10px;
-    padding: 10px 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Added box-shadow */
+    padding: 10px; /* Padding on all sides */
+    box-shadow: 0 2px 4px rgba(188, 181, 181, 0.1); /* Added box-shadow */
 }
+
 
 .add-btn {
     color: #070606;
@@ -115,4 +117,16 @@ form {
 
 .btnHide:hover {
     background-color: #92d492;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px 0;
+    background-color: #f7f7f7; /* Background color for the footer */
+}
+
+.made-by {
+    font-size: 18px;
+    color: #6c757d; /* Text color for the footer */
 }
