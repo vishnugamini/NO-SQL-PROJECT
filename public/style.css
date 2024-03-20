@@ -32,12 +32,16 @@ form {
     align-items: center; /* Center inner content */
 }
 
-.inpt {
-    border: 2px solid; /* Add border on all sides */
+#input {
+    border:none; /* Add border on all sides */
     border-radius: 25px;
     outline: none;
     background-color: #d9f5ec;
     margin-bottom: 10px;
+    width: 80%;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px; /* Padding on all sides */
     box-shadow: 0 2px 4px rgba(188, 181, 181, 0.1); /* Added box-shadow */
 }
@@ -51,6 +55,7 @@ form {
     border-radius: 15px;
     background-color: #2cda83;
     padding: 10px 20px; /* Increased padding for spacing */
+    margin-left: 10px;
 }
 .add-btn:hover {
     background-color: #92d492;
