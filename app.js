@@ -12,7 +12,9 @@ const port = process.env.PORT || 3000;
 // Database connection with mongoose (MongoDB)
 mongoose.connect("mongodb://vishnugamini:vishnugamini@ac-ehuqk1l-shard-00-00.0trohxu.mongodb.net:27017,ac-ehuqk1l-shard-00-01.0trohxu.mongodb.net:27017,ac-ehuqk1l-shard-00-02.0trohxu.mongodb.net:27017/?authSource=admin&replicaSet=atlas-gda4y5-shard-0&retryWrites=true&w=majority&appName=Cluster0&ssl=true", {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: 10000, // Timeout for server selection
+    socketTimeoutMS: 45000 // Timeout for individual operations
 })
 .then(() => console.log('MongoDB connected'))
 .catch(err => console.log('MongoDB connection error:', err));
@@ -45,7 +47,11 @@ const userSchema = new mongoose.Schema({
 });
 
 const todoSchema = new mongoose.Schema({
-    name: String
+    name: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
 
 const User = mongoose.model("User", userSchema);
@@ -75,9 +81,9 @@ passport.deserializeUser(function(id, done) {
 
 // Routes
 
-// Display all todo items
+// Display all todo items for the authenticated user
 app.get("/", isAuthenticated, (req, res) => {
-    Todo.find({}, (error, todoList) => {
+    Todo.find({ user: req.user._id }, (error, todoList) => {
         if (error) {
             console.log(error);
             res.status(500).send('Error fetching todo items');
@@ -86,15 +92,12 @@ app.get("/", isAuthenticated, (req, res) => {
         }
     });
 });
-app.get('/register', (req, res) => {
-    res.render('register', { message: req.flash('error'), successMessage: req.flash('success') });
-});
 
-
-// Add new task
+// Add new task for the authenticated user
 app.post("/newtodo", isAuthenticated, (req, res) => {
     const newTask = new Todo({
-        name: req.body.task
+        name: req.body.task,
+        user: req.user._id
     });
     // Add to database
     Todo.create(newTask, (err, todo) => {
@@ -107,38 +110,11 @@ app.post("/newtodo", isAuthenticated, (req, res) => {
         }
     });
 });
-app.post('/register', (req, res) => {
-    const { username, password } = req.body;
 
-    User.findOne({ username: username }, (err, user) => {
-        if (err) {
-            console.log(err);
-            res.status(500).send('Error checking for existing user');
-        } else if (user) {
-            req.flash('error', 'Username already exists');
-            res.redirect('/register');
-        } else {
-            const newUser = new User({ username, password });
-            newUser.save((err) => {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send('Error creating new user');
-                } else {
-                    req.flash('success', 'User registered successfully');
-                    setTimeout(() => {
-                        res.redirect('/login'); // Redirect to login page after a short delay
-                    },3000); // Redirect after 1 second (adjust as needed)
-                }
-            });
-        }
-    });
-});
-
-
-// Delete task by id
+// Delete task by id for the authenticated user
 app.get("/delete/:id", isAuthenticated, (req, res) => {
     const taskId = req.params.id;
-    Todo.deleteOne({ _id: taskId }, (err, result) => {
+    Todo.deleteOne({ _id: taskId, user: req.user._id }, (err, result) => {
         if (err) {
             console.log(`Error in deleting the task ${taskId}`);
             res.status(500).send('Error deleting task');
@@ -149,9 +125,9 @@ app.get("/delete/:id", isAuthenticated, (req, res) => {
     });
 });
 
-// Delete all tasks
+// Delete all tasks for the authenticated user
 app.post("/delAlltodo", isAuthenticated, (req, res) => {
-    Todo.deleteMany({}, (err, result) => {
+    Todo.deleteMany({ user: req.user._id }, (err, result) => {
         if (err) {
             console.log(err);
             res.status(500).send('Error deleting all tasks');
@@ -162,12 +138,12 @@ app.post("/delAlltodo", isAuthenticated, (req, res) => {
     });
 });
 
-// Update task by id
+// Update task by id for the authenticated user
 app.post("/updatetodo/:id", isAuthenticated, (req, res) => {
     const taskId = req.params.id;
     const newName = req.body.newName;
 
-    Todo.findByIdAndUpdate(taskId, { name: newName }, (err, updatedTodo) => {
+    Todo.findOneAndUpdate({ _id: taskId, user: req.user._id }, { name: newName }, (err, updatedTodo) => {
         if (err) {
             console.log(err);
             res.status(500).send('Error updating task');
@@ -196,7 +172,7 @@ app.get('/logout', (req, res) => {
 
 // User Registration Route
 app.get('/register', (req, res) => {
-    res.render('register', { message: req.flash('error') });
+    res.render('register', {});
 });
 
 app.post('/register', (req, res) => {
@@ -231,19 +207,6 @@ function isAuthenticated(req, res, next) {
     }
     res.redirect('/login');
 }
-// Add a route to clear all users
-// app.get('/clearusers', (req, res) => {
-//     // Remove all documents from the User collection
-//     User.deleteMany({}, (err) => {
-//         if (err) {
-//             console.log(err);
-//             res.status(500).send('Error clearing users');
-//         } else {
-//             console.log('All users cleared successfully');
-//             res.send('All users cleared successfully');
-//         }
-//     });
-// });
 
 // Catch invalid GET requests
 app.get("*", (req, res) => {
