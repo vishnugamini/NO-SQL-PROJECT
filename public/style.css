@@ -45,6 +45,12 @@ form {
     padding: 10px; /* Padding on all sides */
     box-shadow: 0 2px 4px rgba(188, 181, 181, 0.1); /* Added box-shadow */
 }
+.review{
+    text-decoration: none;
+    margin-top: 10px;
+
+
+}
 
 
 .add-btn {
