@@ -1,0 +1,21 @@
+<!-- review.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit a Review</title>
+    <link rel="stylesheet" href="review.css">
+</head>
+<body>
+    <h1>Submit a Review</h1>
+    <form action="/submit-review" method="POST">
+        <label for="username">Username:</label>
+        <!-- Automatically fill the username field -->
+        <input type="text" id="username" name="username" value="<%= username %>" readonly><br><br>
+        <label for="review">Review:</label><br>
+        <textarea id="review" name="review" rows="4" cols="50" required></textarea><br><br>
+        <button type="submit">Submit Review</button>
+    </form>
+</body>
+</html>

@@ -41,6 +41,7 @@ app.use(passport.session());
 app.use(flash());
 
 // Mongoose schemas
+
 const userSchema = new mongoose.Schema({
     username: String,
     password: String
@@ -53,7 +54,12 @@ const todoSchema = new mongoose.Schema({
         ref: 'User'
     }
 });
+const reviewSchema = new mongoose.Schema({
+    username: String,
+    review: String
+});
 
+const Review = mongoose.model("Review", reviewSchema);
 const User = mongoose.model("User", userSchema);
 const Todo = mongoose.model("Todo", todoSchema);
 
@@ -164,6 +170,26 @@ app.post('/login', passport.authenticate('local', {
     failureRedirect: '/login',
     failureFlash: true // Enable flash messages for failed login attempts
 }));
+app.post("/submit-review", isAuthenticated, (req, res) => {
+    const { username, review } = req.body;
+
+    // Create a new review document
+    const newReview = new Review({
+        username: username,
+        review: review
+    });
+
+    // Save the review to the database
+    newReview.save((err) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error submitting review');
+        } else {
+            console.log('Review submitted successfully');
+            res.redirect('/');
+        }
+    });
+});
 
 app.get('/logout', (req, res) => {
     req.logout();
@@ -174,6 +200,11 @@ app.get('/logout', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register', {});
 });
+// Display the review form
+app.get("/review", isAuthenticated, (req, res) => {
+    res.render("review.ejs", { username: req.user.username }); // Pass username to the template
+});
+
 
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
